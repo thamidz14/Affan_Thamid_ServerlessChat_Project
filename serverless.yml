@@ -1,0 +1,14 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: affanthamidserverlesschatproject
+# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
+app: affan-thamid-serverlesschat-project
+service: serverless-chat-app
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+
+functions:
+  hello:
+    handler: handler.hello 
