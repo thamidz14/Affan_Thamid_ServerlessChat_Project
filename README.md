@@ -84,7 +84,7 @@ Install Dependencies:
              path: messages
              method: post
 
-     getMessages:
+  getMessages:
        handler: handler.getMessages
        events:
          - http:
