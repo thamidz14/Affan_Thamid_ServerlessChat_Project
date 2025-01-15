@@ -69,6 +69,44 @@ Install Dependencies:
   1. Create a DynamoDB Table: Go to the AWS Management Console and create a DynamoDB table named ChatMessages with a primary key messageId.
   2. Define Serverless Functions: Open serverless.yml and define your Lambda functions and DynamoDB table
 
+   service: serverless-chat-app
+
+   provider:
+     name: aws
+     runtime: nodejs14.x
+     region: us-east-1
+
+   functions:
+     createMessage:
+       handler: handler.createMessage
+       events:
+         - http:
+             path: messages
+             method: post
+
+     getMessages:
+       handler: handler.getMessages
+       events:
+         - http:
+             path: messages
+             method: get
+
+   resources:
+     Resources:
+       ChatMessages:
+         Type: AWS::DynamoDB::Table
+         Properties:
+           TableName: ChatMessages
+           AttributeDefinitions:
+             - AttributeName: messageId
+               AttributeType: S
+           KeySchema:
+             - AttributeName: messageId
+               KeyType: HASH
+           ProvisionedThroughput:
+             ReadCapacityUnits: 1
+             WriteCapacityUnits: 1
+
 # Step 4: Implement Lambda Functions
    
 1. Create handler.js: Implement the logic for creating and retrieving messages.
