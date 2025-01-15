@@ -3,5 +3,11 @@
 git add serverless.yml
 git commit -m "Added serverless.yml"
 git push origin main
+```
+Merge / Rebase
+```
+git pull --no-rebase
+git pull --rebase
+git pull --ff-only
 aws s3 cp index.html s3://thamidaffan-bucket/index.html
 ```
