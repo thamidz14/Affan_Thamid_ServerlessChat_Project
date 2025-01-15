@@ -170,6 +170,7 @@ Enable static website hosting in the bucket properties.
 
   # 1. Create an S3 Bucket:
 `aws s3api create-bucket --bucket thamidaffan-bucket --region us-east-1`
+  - Stuck on configuring affan s3 bucket thamidaffan-bucket to my aws account
 
   # 2. Create a DynamoDB Table: -  Step Completed 
   Name it ChatMessages
