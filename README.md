@@ -69,6 +69,279 @@ Install Dependencies:
   1. Create a DynamoDB Table: Go to the AWS Management Console and create a DynamoDB table named ChatMessages with a primary key messageId.
   2. Define Serverless Functions: Open serverless.yml and define your Lambda functions and DynamoDB table
 
+```
+   service: serverless-chat-app
+
+   provider:
+     name: aws
+     runtime: nodejs14.x
+     region: us-east-1
+
+   functions:
+     createMessage:
+       handler: handler.createMessage
+       events:
+         - http:
+             path: messages
+             method: post
+
+  getMessages:
+       handler: handler.getMessages
+       events:
+         - http:
+             path: messages
+             method: get
+
+   resources:
+     Resources:
+       ChatMessages:
+         Type: AWS::DynamoDB::Table
+         Properties:
+           TableName: ChatMessages
+           AttributeDefinitions:
+             - AttributeName: messageId
+               AttributeType: S
+           KeySchema:
+             - AttributeName: messageId
+               KeyType: HASH
+           ProvisionedThroughput:
+             ReadCapacityUnits: 1
+             WriteCapacityUnits: 1
+```
 # Step 4: Implement Lambda Functions
    
 1. Create handler.js: Implement the logic for creating and retrieving messages.
+
+```
+const AWS = require('aws-sdk');
+const uuid = require('uuid');
+
+const dynamoDb = new AWS.DynamoDB.DocumentClient();
+
+module.exports.createMessage = async (event) => {
+  const data = JSON.parse(event.body);
+  const params = {
+    TableName: 'ChatMessages',
+    Item: {
+      messageId: uuid.v4(),
+      text: data.text,
+      createdAt: new Date().toISOString(),
+    },
+  };
+
+  try {
+    await dynamoDb.put(params).promise();
+    return {
+      statusCode: 200,
+      body: JSON.stringify(params.Item),
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: 'Could not create message' }),
+    };
+  }
+};
+
+module.exports.getMessages = async () => {
+  const params = {
+    TableName: 'ChatMessages',
+  };
+
+  try {
+    const result = await dynamoDb.scan(params).promise();
+    return {
+      statusCode: 200,
+      body: JSON.stringify(result.Items),
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: 'Could not retrieve messages' }),
+    };
+  }
+};
+```
+
+
+# Step 1: Create an S3 Bucket**:
+This will host your static files (HTML, CSS, JavaScript).
+Enable static website hosting in the bucket properties.
+
+  # 1. Create an S3 Bucket:
+`aws s3api create-bucket --bucket thamidaffan-bucket --region us-east-1`
+
+  # 2. Create a DynamoDB Table: -  Step Completed 
+  Name it ChatMessages
+  Set a primary key, e.g., MessageID (String).
+
+  # 3. Create an IAM Role:
+
+This role will be used by your Lambda function.
+Attach policies for DynamoDB access and CloudWatch logs.
+
+# Step 2: Develop the Backend with AWS Lambda
+
+  # 1. Create a Lambda Function
+
+Use Python as the runtime.
+Assign the IAM role created earlier.
+
+This function will handle storing and retrieving chat messages.
+
+python:lambda_function.py
+
+```
+import json
+import boto3
+from datetime import datetime
+
+dynamodb = boto3.resource('dynamodb')
+table = dynamodb.Table('ChatMessages')
+
+def lambda_handler(event, context):
+    if event['httpMethod'] == 'POST':
+        # Store a new message
+        body = json.loads(event['body'])
+        message_id = str(datetime.now().timestamp())
+        table.put_item(Item={
+            'MessageID': message_id,
+            'Username': body['username'],
+            'Message': body['message'],
+            'Timestamp': message_id
+        })
+        return {
+            'statusCode': 200,
+            'body': json.dumps('Message stored successfully')
+        }
+    elif event['httpMethod'] == 'GET':
+        # Retrieve messages
+        response = table.scan()
+        return {
+            'statusCode': 200,
+            'body': json.dumps(response['Items'])
+        }
+    else:
+        return {
+            'statusCode': 400,
+            'body': json.dumps('Unsupported method')
+        }
+```
+```
+import json
+import boto3
+from datetime import datetime
+
+dynamodb = boto3.resource('dynamodb')
+table = dynamodb.Table('ChatMessages')
+
+def lambda_handler(event, context):
+    if event['httpMethod'] == 'POST':
+        # Store a new message
+        body = json.loads(event['body'])
+        message_id = str(datetime.now().timestamp())
+        table.put_item(Item={
+            'MessageID': message_id,
+            'Username': body['username'],
+            'Message': body['message'],
+            'Timestamp': message_id
+        })
+        return {
+            'statusCode': 200,
+            'body': json.dumps('Message stored successfully')
+        }
+    elif event['httpMethod'] == 'GET':
+        # Retrieve messages
+        response = table.scan()
+        return {
+            'statusCode': 200,
+            'body': json.dumps(response['Items'])
+        }
+    else:
+        return {
+            'statusCode': 400,
+            'body': json.dumps('Unsupported method')
+        }
+```
+
+# Step 3: Set Up API Gateway
+
+1. **Create a REST API**:
+ Create a new resource, e.g., `/chat`.
+ Create two methods: `POST` and `GET`.
+
+2. Integrate with Lambda**:
+   For both methods, set the integration type to Lambda Function.
+   Select the Lambda function you created.
+
+3. Deploy the API:
+   Create a new stage and deploy your API.
+
+
+# Step 4: Develop the Frontend
+1. **Create HTML/JavaScript Files**:
+   
+   - These files will be uploaded to your S3 bucket.
+
+```html:index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Serverless Chat App</title>
+    <style>
+        /* Add some basic styling */
+    </style>
+</head>
+<body>
+    <h1>Chat Application</h1>
+    <div id="chat-box"></div>
+    <input type="text" id="username" placeholder="Username">
+    <input type="text" id="message" placeholder="Message">
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+        const apiUrl = 'https://your-api-id.execute-api.region.amazonaws.com/stage/chat';
+
+        async function sendMessage() {
+            const username = document.getElementById('username').value;
+            const message = document.getElementById('message').value;
+
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, message })
+            });
+
+            if (response.ok) {
+                loadMessages();
+            }
+        }
+
+        async function loadMessages() {
+            const response = await fetch(apiUrl);
+            const messages = await response.json();
+            const chatBox = document.getElementById('chat-box');
+            chatBox.innerHTML = messages.map(msg => `<p><strong>${msg.Username}:</strong> ${msg.Message}</p>`).join('');
+        }
+
+        // Load messages on page load
+        loadMessages();
+    </script>
+</body>
+</html>
+```
+# Step 5: Deploy the Frontend
+
+1. Upload Files to S3:
+Upload your index.html and any other static files to the S3 bucket.
+Make sure the files are publicly accessible.
+
+2. Access the Application:
+Use the S3 bucket URL to access your chat application.
+
+# Step 6: Test the Application
+Open the S3 URL in a browser.
+Test sending and receiving messages.
