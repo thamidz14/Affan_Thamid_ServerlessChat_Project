@@ -10,5 +10,32 @@ provider:
   region: us-east-1
 
 functions:
-  hello:
-    handler: handler.hello 
+  createMessage:
+    handler: handler.createMessage
+    events:
+    - http:
+        path: messages
+        method: post
+
+getMessages:
+  handler: handler.getMessages
+  events:
+  - http:
+      path: messages
+      method: get
+
+resources:
+  Resources:
+    ChatMessages:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ChatMessages
+        AttributeDefinitions:
+          - AttributeName: messageId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: messageId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
