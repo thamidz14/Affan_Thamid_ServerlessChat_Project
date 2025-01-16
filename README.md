@@ -345,3 +345,17 @@ Use the S3 bucket URL to access your chat application.
 # Step 6: Test the Application
 Open the S3 URL in a browser.
 Test sending and receiving messages.
+
+aws sts assume-role --role-arn arn:aws:iam::301570629804:role/testhamidaffansync --role-session-name testSessionName
+
+aws sts assume-role --role-arn arn:aws:iam::954976328760:role/Affan_Thamid_ServerlessChat_Project --role-session-name testSessionName
+
+   unset AWS_ACCESS_KEY_ID
+   unset AWS_SECRET_ACCESS_KEY
+   unset AWS_SESSION_TOKEN
+
+   aws sts assume-role --role-arn arn:aws:iam::301570629804:role/testhamidaffansync --role-session-name testSessionName1
+
+   export AWS_ACCESS_KEY_ID=NEW_TEMP_ACCESS_KEY_ID
+   export AWS_SECRET_ACCESS_KEY=NEW_TEMP_SECRET_ACCESS_KEY
+   export AWS_SESSION_TOKEN=NEW_TEMP_SESSION_TOKEN
