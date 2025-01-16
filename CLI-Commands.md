@@ -4,6 +4,12 @@ git add serverless.yml
 git commit -m "Added serverless.yml"
 git push origin main
 ```
+```
+git add CLI-Commands.md
+git commit -m "Added CLI-Commands.md"
+git push origin main
+```
+
 Merge / Rebase
 ```
 git pull --no-rebase
