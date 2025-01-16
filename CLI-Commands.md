@@ -10,4 +10,8 @@ git pull --no-rebase
 git pull --rebase
 git pull --ff-only
 aws s3 cp index.html s3://thamidaffan-bucket/index.html
+
+git push -u origin main
+git fetch origin
+
 ```
