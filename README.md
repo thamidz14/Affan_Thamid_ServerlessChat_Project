@@ -302,7 +302,7 @@ def lambda_handler(event, context):
     <button onclick="sendMessage()">Send</button>
 
     <script>
-        const apiUrl = 'https://your-api-id.execute-api.region.amazonaws.com/stage/chat';
+        const apiUrl = 'https://hbbfrex8m8.execute-api.us-east-1.amazonaws.com/prod';
 
         async function sendMessage() {
             const username = document.getElementById('username').value;
@@ -372,15 +372,15 @@ aws sts assume-role --role-arn arn:aws:iam::954976328760:role/Affan_Thamid_Serve
 Modify the function name to AffanThamidServerlessChatProject
 Modify the role to arn:aws:iam::954976328760:role/Affan_Thamid_ServerlessChat_Project
 Modify the region to us-east-1
-
+```
    aws lambda create-function --function-name AffanThamidServerlessChatProject \
    --zip-file fileb://function.zip --handler lambda_function.lambda_handler \
    --runtime python3.8 --role arn:aws:iam::954976328760:role/Affan_Thamid_ServerlessChat_Project --region us-east-1
-
+```
 
 Modify the function name to AffanThamidServerlessChatProject
 Modify the region to us-east-1
-
+```
    aws lambda update-function-code --function-name AffanThamidServerlessChatProject \
    --zip-file fileb://function.zip --region us-east-1
 
@@ -393,3 +393,4 @@ Modify the region to us-east-1
    --cli-binary-format raw-in-base64-out --region us-east-1
 
    aws lambda delete-function --function-name AffanThamidServerlessChatProject --region us-east-1
+```
