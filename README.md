@@ -279,44 +279,52 @@ def lambda_handler(event, context):
    Create a new stage and deploy your API.
 
   **Step-by-Step Guide to Integrate Lambda with API Gateway**
-  
-  Open the AWS Management Console:
-  	⁃	Navigate to the AWS Management Console.
-  Go to API Gateway:
-  	⁃	In the AWS Management Console, search for "API Gateway" and select it.
-  Create a New API:
-  	⁃	Click on "Create API".
-  	⁃	Choose "REST API" and select "Build".
-  Configure the API:
-  	⁃	Enter a name for your API, e.g., "ChatAPI".
-  	⁃	Provide a description if desired.
-  	⁃	Choose "Regional" for the endpoint type.
-  	⁃	Click "Create API".
-  Create a Resource:
-  	⁃	In the left-hand pane, click on "Resources".
-  	⁃	Click "Actions" and select "Create Resource".
-  	⁃	Enter a resource name, e.g., "chat".
-  	⁃	Click "Create Resource".
-  Create Methods:
-  	⁃	Select the newly created resource (e.g., /chat).
-  	⁃	Click "Actions" and select "Create Method".
-  	⁃	Choose POST from the dropdown and click the checkmark.
-  	⁃	Repeat the process to create a GET method.
-  Integrate with Lambda:
-  	⁃	For each method (POST and GET):
-  	⁃	Select the method (e.g., POST).
-  	⁃	In the "Integration type" section, choose "Lambda Function".
-  	⁃	Check "Use Lambda Proxy integration".
-  	⁃	In the "Lambda Function" field, start typing the name of your Lambda function and select it from the dropdown.
-  	⁃	Click "Save".
-  	⁃	You may be prompted to add permissions for API Gateway to invoke your Lambda function. Click "OK".
-  Deploy the API:
-  	⁃	Click on "Actions" and select "Deploy API".
-  	⁃	Create a new deployment stage, e.g., "prod".
-  	⁃	Click "Deploy".
-  Note the Invoke URL:
-  	⁃ After deployment, you'll see an "Invoke URL" for your API. This is the URL you'll use in your frontend code to interact with the API.
+---
+`Open the AWS Management Console:
+- Navigate to the AWS Management Console.
 
+Go to API Gateway:
+- In the AWS Management Console, search for "API Gateway" and select it.
+
+Create a New API:
+- Click on "Create API".
+- Choose "REST API" and select "Build".
+
+Configure the API:
+- Enter a name for your API, e.g., "ChatAPI".
+- Provide a description if desired.
+- Choose "Regional" for the endpoint type.
+- Click "Create API".
+
+Create a Resource:
+- In the left-hand pane, click on "Resources".
+- Click "Actions" and select "Create Resource".
+- Enter a resource name, e.g., "chat".
+- Click "Create Resource".
+
+Create Methods:
+- Select the newly created resource (e.g., /chat). 
+- Click "Actions" and select "Create Method". 
+- Choose POST from the dropdown and click the checkmark. 
+- Repeat the process to create a GET method.
+
+Integrate with Lambda:
+- For each method (POST and GET):
+- Select the method (e.g., POST).
+- In the "Integration type" section, choose "Lambda Function".
+- Check "Use Lambda Proxy integration".
+- In the "Lambda Function" field, start typing the name of your Lambda function and select it from the dropdown.
+- Click "Save".
+- You may be prompted to add permissions for API Gateway to invoke your Lambda function. Click "OK".
+
+Deploy the API:
+- Click on "Actions" and select "Deploy API".
+- Create a new deployment stage, e.g., "prod".
+- Click "Deploy".
+
+Note the Invoke URL:
+- After deployment, you'll see an "Invoke URL" for your API. This is the URL you'll use in your frontend code to interact with the API.`
+---
 
 # Step 4: Develop the Frontend
 1. **Create HTML/JavaScript Files**:
