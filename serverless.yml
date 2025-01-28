@@ -1,46 +1,11 @@
-# "org" ensures this Service is used with the correct Serverless Framework Access Key.
-org: affanthamidserverlesschatproject
-# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
-app: affan-thamid-serverlesschat-project
-service: serverless-chat-app
+   service: serverless-chat-app
 
-provider:
-  name: aws
-  runtime: nodejs18.x
-  region: us-east-1
+   provider:
+     name: aws
+     runtime: nodejs14.x
+     region: us-east-1
 
-functions:
-<<<<<<< HEAD
-  createMessage:
-    handler: handler.createMessage
-    events:
-    - http:
-        path: messages
-        method: post
-
-getMessages:
-  handler: handler.getMessages
-  events:
-  - http:
-      path: messages
-      method: get
-
-resources:
-  Resources:
-    ChatMessages:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: ChatMessages
-        AttributeDefinitions:
-          - AttributeName: messageId
-            AttributeType: S
-        KeySchema:
-          - AttributeName: messageId
-            KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
-=======
+   functions:
      createMessage:
        handler: handler.createMessage
        events:
@@ -70,4 +35,3 @@ resources:
            ProvisionedThroughput:
              ReadCapacityUnits: 1
              WriteCapacityUnits: 1
->>>>>>> 413c2f9e0da9eabbde70f0a2c84e6e9b64ccdc46
