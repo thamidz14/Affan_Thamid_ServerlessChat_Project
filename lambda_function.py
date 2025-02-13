@@ -64,3 +64,4 @@ def lambda_handler(event, context):
             'statusCode': 400,
             'body': json.dumps('Unsupported method')
         }
+
